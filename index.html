@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>메소 모으기</title>
+<style>
+:root{--bg:#f5f5f5;--cd:#fff;--tx:#222;--sb:#888;--ln:#ddd;--ac:#ff9919;--al:#ffeed1;--k0:#3380f2;--k1:#d9404d;--k2:#26a666;--k3:#808080;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161616;--cd:#222;--tx:#eee;--sb:#999;--ln:#3a3a3a;--al:#4a3513}}
+:root[data-theme=dark]{--bg:#161616;--cd:#222;--tx:#eee;--sb:#999;--ln:#3a3a3a;--al:#4a3513}
+html,body{height:100%}body{margin:0;font:14px/1.4 "Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--tx);display:flex}
+.sb{width:190px;background:var(--cd);border-right:1px solid var(--ln);padding:20px 12px;display:flex;flex-direction:column;gap:6px;flex:none}.sb>b{font-size:17px;margin:0 8px 14px}
+.nv{padding:9px 12px;border-radius:8px;cursor:pointer}.nv.on{background:var(--al);font-weight:700}
+main{flex:1;padding:24px;display:flex;flex-direction:column;gap:16px;min-width:0;overflow:auto}
+.cd{background:var(--cd);border:1px solid var(--ln);border-radius:12px;padding:16px}
+h1{font-size:22px;margin:0}.sub{color:var(--sb);font-size:12px}
+.bar{height:10px;background:var(--ln);border-radius:5px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--ac)}
+.g2{display:grid;grid-template-columns:1fr 290px;gap:16px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.wd{text-align:center;color:var(--sb);font-size:12px}
+.dy{min-height:64px;border:1px solid var(--ln);border-radius:8px;padding:4px;cursor:pointer;overflow:hidden;min-width:0}.dy.on{background:var(--al);border-color:var(--ac)}.dy.e{border:0;cursor:default}
+.tg{font-size:10px;font-weight:700;border-radius:4px;padding:1px 4px;margin-top:2px;white-space:nowrap;overflow:hidden;color:var(--c);background:color-mix(in srgb,var(--c) 15%,transparent);display:inline-block;max-width:100%}
+.t0{--c:var(--k0)}.t1{--c:var(--k1)}.t2{--c:var(--k2)}.t3{--c:var(--k3)}
+.ch{display:inline-block;padding:5px 11px;border:1px solid var(--c,var(--ln));border-radius:16px;margin:0 4px 4px 0;cursor:pointer;font-size:12px;color:var(--c,var(--tx))}.ch.on{background:color-mix(in srgb,var(--c,var(--ac)) 18%,transparent);font-weight:700}
+input,select{font:inherit;color:var(--tx);background:var(--cd);border:1px solid var(--ln);border-radius:8px;padding:8px;width:100%;box-sizing:border-box;min-width:0}
+button{font:inherit;background:var(--ac);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-weight:700;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,.nv:focus-visible{outline:2px solid var(--ac)}
+.row{display:flex;gap:8px;align-items:center}.cr b,.cr button{flex:none;white-space:nowrap}.cr input{flex:1;width:auto}
+.sl{display:grid;grid-template-columns:24px 1.6fr 1fr 74px 150px;gap:8px;align-items:center;margin-bottom:6px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.4);display:grid;place-items:center;z-index:9}.md{background:var(--cd);border-radius:14px;padding:22px;width:min(320px,86vw);text-align:center;display:grid;gap:8px}.ic{width:44px;height:44px;border-radius:50%;background:var(--al);color:var(--ac);display:grid;place-items:center;font-size:22px;margin:0 auto}
+.bs{background:var(--cd);color:var(--tx);border:1px solid var(--ln)}
+.up{width:110px;height:110px;border:1px dashed var(--ln);border-radius:10px;display:grid;place-items:center;text-align:center;color:var(--sb);font-size:12px;cursor:pointer;overflow:hidden;flex:none}.up img{width:100%;height:100%;object-fit:cover}
+.pi{width:100%;height:150px;border-radius:8px;object-fit:cover;background:var(--ln);display:grid;place-items:center;color:var(--sb);font-size:12px;margin:8px 0}.gi{width:56px;height:56px;border-radius:8px;object-fit:cover;flex:none}
+@media(max-width:760px){body{flex-direction:column-reverse}.sb{flex-direction:row;width:auto;border:0;border-top:1px solid var(--ln);padding:8px;justify-content:space-around}.sb>b{display:none}.g2{grid-template-columns:1fr!important}.sl{grid-template-columns:18px 1fr 1fr 62px}.sl .am{display:none}main{padding:16px}}
+</style></head><body>
+<div class="sb"><b>메소 모으기</b><div id="nv" style="display:contents"></div></div><main id="mn"></main><div id="pp"></div>
+<script>
+const raw=`자쿰|6|카오스:4040000
+블러디퀸|6|카오스:4070000
+반반|6|카오스:4070000
+피에르|6|카오스:4080000
+매그너스|6|하드:4280000
+벨룸|6|카오스:4640000
+파풀라투스|6|카오스:6550000
+스우|6|노멀:8350000,하드:48900000,익스트림:545000000:2
+데미안|6|노멀:8750000,하드:46400000
+가디언 엔젤 슬라임|6|노멀:12700000,카오스:71300000
+루시드|6|이지:14900000,노멀:17800000,하드:59700000
+윌|6|이지:16100000,노멀:20500000,하드:73200000
+더스크|6|노멀:22000000,카오스:66300000
+듄켈|6|노멀:23700000,하드:89600000
+진 힐라|6|노멀:67600000,하드:100000000
+선택받은 세렌|6|노멀:167000000,하드:302000000,익스트림:1840000000
+감시자 칼로스|6|이지:238000000,노멀:479000000,카오스:1230000000,익스트림:4104000000
+최초의 대적자|3|이지:261000000,노멀:532000000,하드:1390000000,익스트림:4712000000
+카링|6|이지:320000000,노멀:593000000,하드:1560000000,익스트림:5387000000
+벨로나|3|이지:396000000,노멀:824000000,하드:2950000000
+찬란한 흉성|3|노멀:576000000,하드:2678000000
+림보|3|노멀:995000000,하드:2385000000
+발드릭스|3|노멀:1320000000,하드:3078000000
+유피테르|3|노멀:1560000000,하드:4845000000`;
+const pr=l=>{const[a,m,ds]=l.split('|');return[a,ds.split(',').map(x=>{const[d,p,mx]=x.split(':');return[d,+p,+(mx||m)]})]};
+const B=raw.split('\n').map(pr),MB=pr('검은 마법사|6|하드:465000000,익스트림:5680000000');
+const K={사냥:0,보스:1,판매:2,기타:3},$=s=>document.querySelector(s);
+const e=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const key=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const fm=n=>(+n||0).toLocaleString('ko-KR');
+const fe=n=>(+(n||0)/1e8).toLocaleString('ko-KR',{maximumFractionDigits:2})+'억';
+const fk=n=>{n=Math.floor(+n||0);if(!n)return '0';const s=[];for(const[u,v]of[['조',1e12],['억',1e8],['만',1e4]]){const q=Math.floor(n/v);if(q){s.push(q.toLocaleString('ko-KR')+u);n%=v}}if(n)s.push(n.toLocaleString('ko-KR'));return s.join(' ')};
+const gb=(i,b)=>(i==12?[MB]:B).find(x=>x[0]==b),gd=(i,b,d)=>gb(i,b)[1].find(x=>x[0]==d);
+const amt=(s,i)=>s&&s.d?Math.floor(gd(i,s.b,s.d)[1]/s.p):0;
+let S;try{S=JSON.parse(localStorage.getItem('meso'))}catch(x){}
+S=S||{item:{n:'',t:0,m:''},ch:[],cur:0,rec:{}};
+if(S.ch.length==1&&S.ch[0].n=='캐릭터 A'&&!S.ch[0].s.some(Boolean))S.ch=[];
+const sv=()=>{try{localStorage.setItem('meso',JSON.stringify(S))}catch(x){}};
+const now=new Date();let tab=0,Y=now.getFullYear(),M=now.getMonth(),sel=key(now),fs='사냥',cc=0,chk={};
+function est(tot,t){if(!t)return '<span class="sub">목표 메소를 설정하면 구매 예상 기간이 나와요</span>';const rem=t-tot;if(rem<=0)return '<b style="color:var(--k2)">목표 금액을 모았어요 🎉</b>';let w=0;S.ch.forEach(c=>c.s.forEach((s,i)=>{if(s&&s.d)w+=i==12?amt(s,i)*12/52:amt(s,i)}));if(!w)return '<span class="sub">보스 설정에서 캐릭터와 보스를 등록하면 구매 예상 기간이 나와요</span>';const n=Math.ceil(rem/w),d=new Date();d.setDate(d.getDate()+n*7);return `<b>약 ${n}주 후 (${key(d).replace(/-/g,'.')}경) 구매 가능</b><div class="sub">남은 메소 ${fk(rem)} · 주간 보스 수익 ${fk(Math.round(w/1e4)*1e4)} 기준 (월간 보스는 주 단위로 환산)</div>`}
+function D(){
+ const tot=Object.values(S.rec).flat().reduce((a,r)=>a+r.a,0),t=+S.item.t||0,p=t?Math.min(100,tot/t*100):0;
+ const d0=new Date();d0.setDate(d0.getDate()-((d0.getDay()+3)%7));const wk=key(d0);
+ const w=Object.entries(S.rec).filter(([k])=>k>=wk).reduce((a,[,v])=>a+v.reduce((x,r)=>x+r.a,0),0);
+ const f=new Date(Y,M,1).getDay(),n=new Date(Y,M+1,0).getDate();let c='';
+ for(let i=0;i<f;i++)c+='<div class="dy e"></div>';
+ for(let d=1;d<=n;d++){const k=key(new Date(Y,M,d));c+=`<div class="dy ${k==sel?'on':''}" onclick="sel='${k}';R()">${d}<br>${Object.entries((S.rec[k]||[]).reduce((o,r)=>(o[r.s]=(o[r.s]||0)+r.a,o),{})).map(([s,a])=>`<span class="tg t${K[s]}" title="${fm(a)}">${s} ${fk(a)}</span>`).join('')}</div>`}
+ return `<h1>대시보드</h1><div class="cd row cr"><b>캐릭터</b><input id="cn" placeholder="캐릭터 이름 입력" onkeydown="if(event.key=='Enter')addCh()"><button onclick="addCh()">추가</button></div>
+<div class="g2" style="grid-template-columns:1fr 200px"><div class="cd row" style="align-items:flex-start"><div style="flex:1;min-width:0"><div class="sub">현재 목표</div><b style="font-size:17px">${e(S.item.n)||'아이템 설정에서 목표를 정하세요'}</b><div class="sub">모은 메소 ${fm(tot)} / 목표 ${fm(t)}</div><div class="sub">(${fk(tot)} / ${fk(t)})</div><div class="bar"><i style="width:${p}%"></i></div><b style="color:var(--ac)">${p.toFixed(0)}% 달성</b><div style="margin-top:8px">${est(tot,t)}</div></div></div>
+<div class="cd"><div class="sub">이번 주 획득 (목요일 초기화)</div><b style="font-size:20px">${fm(w)}</b><div class="sub">${fk(w)}</div></div></div>
+<div class="g2"><div class="cd"><div class="row" style="justify-content:space-between;margin-bottom:6px"><button onclick="mv(-1)">‹</button><b>${Y}년 ${M+1}월</b><button onclick="mv(1)">›</button></div>
+<div style="margin-bottom:6px">${Object.keys(K).map(s=>`<span class="tg t${K[s]}" style="margin-right:6px">${s}</span>`).join('')}</div>
+<div class="cal">${'일월화수목금토'.split('').map(x=>`<div class="wd">${x}</div>`).join('')}${c}</div></div>${P()}</div>`}
+function P(){
+ const rs=S.rec[sel]||[];
+ let h=`<div class="cd"><b>${sel} 수입 기록</b>`+rs.map((r,i)=>`<div class="row" style="margin-top:6px"><span class="tg t${K[r.s]}">${r.s}</span><span style="flex:1;font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis" title="${e(r.m||'')}>${fe(r.a)} ${e(r.m||'')}</span><span style="cursor:pointer" onclick="del(${i})">✕</span></div>`).join('')
+ +'<div class="sub" style="margin:10px 0 4px">출처</div>'+Object.keys(K).map(s=>`<span class="ch t${K[s]} ${fs==s?'on':''}" onclick="fs='${s}';R()">${s}</span>`).join('');
+ if(fs=='보스'){
+  h+='<div class="sub">캐릭터별 클리어 기록</div>'+S.ch.map((x,j)=>`<span class="ch ${cc==j?'on':''}" onclick="cc=${j};R()">${e(x.n)} (${Object.keys(chk).filter(k=>chk[k]&&k.split('|')[0]==j).length})</span>`).join('');
+  const it=(S.ch[cc]?S.ch[cc].s.map((s,i)=>s&&s.d?[i,s]:null).filter(Boolean):[]);
+  h+=it.length?`<label class="row" style="margin:6px 0;font-weight:700"><input type="checkbox" style="width:auto" ${it.every(([i])=>chk[cc+'|'+i])?'checked':''} onchange="selAll(this.checked)"><span>전체 선택</span></label>`+it.map(([i,s])=>{const k=cc+'|'+i;return `<label class="row" style="margin:4px 0"><input type="checkbox" style="width:auto" ${chk[k]?'checked':''} onchange="chk['${k}']=this.checked;R()"><span style="flex:1">${s.b} <span class="sub">${s.d} · ${s.p}인</span></span><span class="sub">${fe(amt(s,i))}</span></label>`}).join(''):'<div class="sub" style="margin:6px 0">보스 설정 탭에서 이 캐릭터의 보스를 먼저 설정하세요</div>';
+  const sum=Object.keys(chk).filter(k=>chk[k]).reduce((a,k)=>{const[c,i]=k.split('|'),s=S.ch[c]&&S.ch[c].s[i];return a+amt(s,+i)},0);
+  h+=`<div class="row" style="justify-content:space-between;margin:8px 0"><b>합계 (자동)</b><b style="color:var(--k1)">${fe(sum)}</b></div>`;
+ }else h+=`<div class="sub" style="margin:6px 0 4px">획득 메소</div><input id="am" inputmode="numeric" placeholder="0" oninput="cm(this,'ah',fe)"><div class="sub" id="ah"></div>`;
+ return h+`<input id="me" placeholder="메모" style="margin:8px 0"><button style="width:100%" onclick="add()">저장</button></div>`}
+function Bs(){
+ const c=S.ch[S.cur]||S.ch[0];
+ if(!c)return `<h1>보스 설정</h1><div class="cd"><b>등록된 캐릭터가 없어요</b><div class="sub" style="margin:6px 0 10px">캐릭터를 추가한 뒤 잡는 보스를 설정하세요.</div><div class="row cr"><input id="cn2" placeholder="캐릭터 이름 입력" onkeydown="if(event.key=='Enter')addCh('cn2')"><button onclick="addCh('cn2')">추가</button></div></div>`;
+ let h=`<h1>보스 설정</h1><div class="g2" style="grid-template-columns:240px 1fr"><div class="cd"><b>내 캐릭터</b>`+S.ch.map((x,j)=>`<div class="nv ${S.cur==j?'on':''}" onclick="S.cur=${j};R()">${e(x.n)} <span class="sub">${x.s.slice(0,12).filter(Boolean).length}/12</span><span style="float:right;cursor:pointer" title="삭제" onclick="event.stopPropagation();askDel(${j})">✕</span></div>`).join('')+`<div class="row cr" style="margin-top:8px"><input id="cn2" placeholder="캐릭터 이름 입력" onkeydown="if(event.key=='Enter')addCh('cn2')"><button onclick="addCh('cn2')">추가</button></div></div><div class="cd"><b>${e(c.n)} 보스 설정</b><div class="sub" style="margin-bottom:8px">주간 보스는 캐릭터마다 최대 12개, 같은 보스는 난이도를 하나만 고를 수 있어요. 인원이 2명이면 금액이 절반이에요.</div>`;
+ for(let i=0;i<13;i++){const s=c.s[i],LL=i==12?[MB]:B,used=c.s.map(x=>x&&x.b),bo=LL.filter(x=>!used.includes(x[0])||(s&&s.b==x[0])),bd=s?gb(i,s.b)[1]:[],mx=s&&s.d?gd(i,s.b,s.d)[2]:0;
+  h+=(i==12?'<div class="sub" style="margin:10px 0 4px">월간 보스 (주간 12개 제한과 별개)</div>':'')+`<div class="sl"><span class="sub">${i==12?'월':i+1}</span><select onchange="sB(${i},this.value)"><option value="">보스 선택</option>${bo.map(x=>`<option ${s&&s.b==x[0]?'selected':''}>${x[0]}</option>`).join('')}</select><select ${s?'':'disabled'} onchange="sD(${i},this.value)"><option value="">난이도</option>${bd.map(x=>`<option ${s&&s.d==x[0]?'selected':''}>${x[0]}</option>`).join('')}</select><select ${mx?'':'disabled'} onchange="sP(${i},+this.value)">${mx?Array.from({length:mx},(_,k)=>`<option value="${k+1}" ${s.p==k+1?'selected':''}>${k+1}인</option>`).join(''):'<option>-</option>'}</select><b class="am" style="color:var(--k1);text-align:right">${s&&s.d?fm(amt(s,i))+(s.p>1?' (÷'+s.p+')':''):'-'}</b></div>`}
+ return h+'</div></div>'}
+let dr=null,pp=null;
+const total=()=>Object.values(S.rec).flat().reduce((a,r)=>a+r.a,0);
+function pv(){const t=+dr.t||0,p=t?Math.min(100,total()/t*100):0;return `<b style="font-size:16px">${e(dr.n)||'목표 아이템 이름'}</b><div class="sub">모은 메소 ${fm(total())} / 목표 ${fm(t)}</div><div class="bar"><i style="width:${p}%"></i></div><b style="color:var(--ac)">${p.toFixed(0)}% 달성</b>`}
+const upPv=()=>{$('#pv').innerHTML=pv()};
+function cm(el,h,f=fk){const v=el.value.replace(/\D/g,'');el.value=v?(+v).toLocaleString('ko-KR'):'';$('#'+h).textContent=v?f(+v):''}
+function pop(ic,t,m,b){pp={ic,t,m,b};R()}
+function saveIt(){S.item={n:dr.n,t:dr.t,m:dr.m};sv();pop('✓','저장했어요','목표 아이템이 저장됐어요. 대시보드에서 확인할 수 있어요.',[['확인']])}
+function askReset(){pop('!','초기화할까요?','입력한 내용과 저장된 목표 아이템이 지워져요. 수입 기록은 그대로 남아요.',[['취소','bs'],['초기화','','doReset()']])}
+function doReset(){S.item={n:'',t:0,m:''};dr={...S.item};sv();pop('✓','초기화했어요','목표 아이템 정보를 모두 비웠어요.',[['확인']])}
+document.addEventListener('keydown',ev=>{if(ev.key=='Escape'&&pp){pp=null;R()}});
+function It(){if(!dr)dr={...S.item};const i=dr;return `<h1>아이템 설정</h1><div class="g2" style="grid-template-columns:1fr 300px"><div class="cd"><b>목표 아이템 입력</b><div class="sub">목표 아이템은 하나만 설정할 수 있어요</div><div class="row" style="align-items:flex-start;margin-top:10px"><div style="flex:1;display:grid;gap:10px;min-width:0"><div><div class="sub">아이템 이름</div><input value="${e(i.n)}" placeholder="예: 아이템 이름" oninput="dr.n=this.value;upPv()"></div><div><div class="sub">목표 메소</div><input inputmode="numeric" value="${i.t?fm(i.t):''}" placeholder="0" oninput="cm(this,'th');dr.t=+this.value.replace(/,/g,'');upPv()"><div class="sub" id="th">${i.t?fk(i.t):''}</div></div><div><div class="sub">메모 (선택)</div><input value="${e(i.m)}" placeholder="구매 계획 등" oninput="dr.m=this.value"></div></div></div><div class="row" style="margin-top:14px"><button onclick="saveIt()">저장</button><button class="bs" onclick="askReset()">초기화</button></div></div><div class="cd" id="pv" style="display:grid;gap:8px;align-content:start">${pv()}</div></div>`}
+const cs=()=>S.ch[S.cur];
+function sB(i,v){cs().s[i]=v?{b:v,d:'',p:1}:null;sv();R()}
+function sD(i,v){const s=cs().s[i];s.d=v;s.p=1;sv();R()}
+function sP(i,v){cs().s[i].p=v;sv();R()}
+function mv(n){M+=n;if(M<0){M=11;Y--}if(M>11){M=0;Y++}R()}
+function addCh(id='cn'){const v=$('#'+id).value.trim();if(!v)return;S.ch.push({n:v,s:Array(13).fill(null)});S.cur=S.ch.length-1;sv();R()}
+function askDel(j){pop('!','캐릭터를 삭제할까요?',e(S.ch[j].n)+'의 보스 설정이 모두 지워져요. 수입 기록은 그대로 남아요.',[['취소','bs'],['삭제','','delCh('+j+')']])}
+function selAll(v){S.ch[cc].s.forEach((s,i)=>{if(s&&s.d)chk[cc+'|'+i]=v});R()}
+function delCh(j){S.ch.splice(j,1);S.cur=0;cc=0;chk={};sv();pp=null;R()}
+function del(i){S.rec[sel].splice(i,1);if(!S.rec[sel].length)delete S.rec[sel];sv();R()}
+function add(){const m=$('#me').value;let a,mm=m;
+ if(fs=='보스'){const ks=Object.keys(chk).filter(k=>chk[k]);if(!ks.length)return;a=0;const dt=ks.map(k=>{const[c,i]=k.split('|'),s=S.ch[c].s[i];a+=amt(s,+i);return S.ch[c].n+': '+s.b+'('+s.d+'·'+s.p+'인)'});mm=(m?m+' ':'')+dt.join(', ');chk={}}
+ else{a=+$('#am').value.replace(/,/g,'');if(!a)return}
+ (S.rec[sel]=S.rec[sel]||[]).push({s:fs,a,m:mm});sv();R()}
+function R(){$('#nv').innerHTML=['대시보드','보스 설정','아이템 설정'].map((t,i)=>`<div class="nv ${tab==i?'on':''}" tabindex="0" onclick="tab=${i};dr=null;R()" onkeydown="if(event.key=='Enter')this.click()">${t}</div>`).join('');$('#mn').innerHTML=[D,Bs,It][tab]();$('#pp').innerHTML=pp?`<div class="ov" onclick="if(event.target==this){pp=null;R()}"><div class="md" role="dialog" aria-modal="true"><div class="ic">${pp.ic}</div><b>${pp.t}</b><div class="sub">${pp.m}</div><div class="row" style="justify-content:center;margin-top:6px">${pp.b.map(x=>`<button class="${x[1]||''}" onclick="${x[2]||'pp=null;R()'}">${x[0]}</button>`).join('')}</div></div></div>`:''}
+R();
+</script></body></html>

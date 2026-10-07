@@ -14,7 +14,7 @@ h1{font-size:22px;margin:0}.sub{color:var(--sb);font-size:12px}
 .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.wd{text-align:center;color:var(--sb);font-size:12px}
 .dy{min-height:64px;border:1px solid var(--ln);border-radius:8px;padding:4px;cursor:pointer;overflow:hidden;min-width:0}.dy.on{background:var(--al);border-color:var(--ac)}.dy.e{border:0;cursor:default}
 .tg{font-size:10px;font-weight:700;border-radius:4px;padding:1px 4px;margin-top:2px;white-space:nowrap;overflow:hidden;color:var(--c);background:color-mix(in srgb,var(--c) 15%,transparent);display:inline-block;max-width:100%}
-.t0{--c:var(--k0)}.t1{--c:var(--k1)}.t2{--c:var(--k2)}.t3{--c:var(--k3)}
+.t0{--c:var(--k0)}.t1{--c:var(--k1)}.t2{--c:var(--k2)}.t3{--c:var(--k3)}.bu{border:1px dashed var(--c)}
 .ch{display:inline-block;padding:5px 11px;border:1px solid var(--c,var(--ln));border-radius:16px;margin:0 4px 4px 0;cursor:pointer;font-size:12px;color:var(--c,var(--tx))}.ch.on{background:color-mix(in srgb,var(--c,var(--ac)) 18%,transparent);font-weight:700}
 input,select{font:inherit;color:var(--tx);background:var(--cd);border:1px solid var(--ln);border-radius:8px;padding:8px;width:100%;box-sizing:border-box;min-width:0}
 button{font:inherit;background:var(--ac);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-weight:700;cursor:pointer}
@@ -25,6 +25,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,.nv:focus-visible{
 .bs{background:var(--cd);color:var(--tx);border:1px solid var(--ln)}
 .up{width:110px;height:110px;border:1px dashed var(--ln);border-radius:10px;display:grid;place-items:center;text-align:center;color:var(--sb);font-size:12px;cursor:pointer;overflow:hidden;flex:none}.up img{width:100%;height:100%;object-fit:cover}
 .pi{width:100%;height:150px;border-radius:8px;object-fit:cover;background:var(--ln);display:grid;place-items:center;color:var(--sb);font-size:12px;margin:8px 0}.gi{width:56px;height:56px;border-radius:8px;object-fit:cover;flex:none}
+.bg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}.bc{border:1px solid var(--ln);border-radius:10px;padding:10px;display:grid;gap:8px;align-content:start}.bc.on{border-color:var(--ac);background:var(--al)}
+.dc{display:inline-block;padding:3px 10px;border:1px solid var(--ln);border-radius:12px;margin:0 4px 4px 0;cursor:pointer;font-size:12px;background:var(--cd)}.dc.on{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:700}
+.bi{width:44px;height:44px;border-radius:10px;background:var(--al);display:grid;place-items:center;position:relative;overflow:hidden;flex:none}.bi i{font-style:normal;font-weight:700;color:var(--ac);font-size:18px}.bi img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sm{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.sm>div{flex:1;min-width:120px;border:1px solid var(--ln);border-radius:10px;padding:10px}.sm b{font-size:18px}
 @media(max-width:760px){body{flex-direction:column-reverse}.sb{flex-direction:row;width:auto;border:0;border-top:1px solid var(--ln);padding:8px;justify-content:space-around}.sb>b{display:none}.g2{grid-template-columns:1fr!important}.sl{grid-template-columns:18px 1fr 1fr 62px}.sl .am{display:none}main{padding:16px}}
 </style></head><body>
 <div class="sb"><b>메소 모으기</b><div id="nv" style="display:contents"></div></div><main id="mn"></main><div id="pp"></div>
@@ -67,15 +71,20 @@ let S;try{S=JSON.parse(localStorage.getItem('meso'))}catch(x){}
 S=S||{item:{n:'',t:0,m:''},ch:[],cur:0,rec:{}};
 if(S.ch.length==1&&S.ch[0].n=='캐릭터 A'&&!S.ch[0].s.some(Boolean))S.ch=[];
 const sv=()=>{try{localStorage.setItem('meso',JSON.stringify(S))}catch(x){}};
+const inc0=()=>Object.values(S.rec).flat().reduce((a,r)=>a+r.a,0),spent=()=>(S.buys||[]).reduce((a,b)=>a+b.a+(b.x||0),0),bal=()=>inc0()-spent();
 const now=new Date();let tab=0,Y=now.getFullYear(),M=now.getMonth(),sel=key(now),fs='사냥',cc=0,chk={};
-function est(tot,t){if(!t)return '<span class="sub">목표 메소를 설정하면 구매 예상 기간이 나와요</span>';const rem=t-tot;if(rem<=0)return '<b style="color:var(--k2)">목표 금액을 모았어요 🎉</b>';let w=0;S.ch.forEach(c=>c.s.forEach((s,i)=>{if(s&&s.d)w+=i==12?amt(s,i)*12/52:amt(s,i)}));if(!w)return '<span class="sub">보스 설정에서 캐릭터와 보스를 등록하면 구매 예상 기간이 나와요</span>';const n=Math.ceil(rem/w),d=new Date();d.setDate(d.getDate()+n*7);return `<b>약 ${n}주 후 (${key(d).replace(/-/g,'.')}경) 구매 가능</b><div class="sub">남은 메소 ${fk(rem)} · 주간 보스 수익 ${fk(Math.round(w/1e4)*1e4)} 기준 (월간 보스는 주 단위로 환산)</div>`}
+function est(tot,t){if(!t)return '<span class="sub">목표 메소를 설정하면 구매 예상 기간이 나와요</span>';const rem=t-tot;if(rem<=0)return '<b style="color:var(--k2)">목표 금액을 모았어요 🎉</b><div style="margin-top:6px"><button onclick="askBuy()">구매 완료</button></div>';let w=0,mo=0;S.ch.forEach(c=>c.s.forEach((s,i)=>{if(s&&s.d)i==12?mo+=amt(s,i):w+=amt(s,i)}));if(!w&&!mo)return '<span class="sub">보스 설정에서 캐릭터와 보스를 등록하면 구매 예상 기간이 나와요</span>';
+ const d0=new Date();d0.setHours(0,0,0,0);const nx=new Date(d0);nx.setDate(nx.getDate()+((4-nx.getDay()+7)%7||7));let prev=d0,got=0;
+ for(let k=0;k<1040;k++){const cur=new Date(nx);cur.setDate(nx.getDate()+7*k);for(let m=new Date(prev.getFullYear(),prev.getMonth()+1,1);m<=cur;m=new Date(m.getFullYear(),m.getMonth()+1,1))got+=mo;got+=w;prev=cur;
+  if(got>=rem)return `<b>${key(cur).replace(/-/g,'.')}(목) 초기화 후 구매 가능 (${k+1}번째 초기화)</b><div class="sub">남은 메소 ${fk(rem)} · 매주 목요일 초기화 직후 등록한 모든 보스를 클리어한다고 가정 (주간 ${fk(w)}${mo?' · 월간 보스는 매월 1일 '+fk(mo):''})</div>`}
+ return '<span class="sub">20년 안에 모으기 어려워요</span>'}
 function D(){
- const tot=Object.values(S.rec).flat().reduce((a,r)=>a+r.a,0),t=+S.item.t||0,p=t?Math.min(100,tot/t*100):0;
+ const tot=bal(),t=+S.item.t||0,p=t?Math.min(100,tot/t*100):0;
  const d0=new Date();d0.setDate(d0.getDate()-((d0.getDay()+3)%7));const wk=key(d0);
  const w=Object.entries(S.rec).filter(([k])=>k>=wk).reduce((a,[,v])=>a+v.reduce((x,r)=>x+r.a,0),0);
  const f=new Date(Y,M,1).getDay(),n=new Date(Y,M+1,0).getDate();let c='';
  for(let i=0;i<f;i++)c+='<div class="dy e"></div>';
- for(let d=1;d<=n;d++){const k=key(new Date(Y,M,d));c+=`<div class="dy ${k==sel?'on':''}" onclick="sel='${k}';R()">${d}<br>${Object.entries((S.rec[k]||[]).reduce((o,r)=>(o[r.s]=(o[r.s]||0)+r.a,o),{})).map(([s,a])=>`<span class="tg t${K[s]}" title="${fm(a)}">${s} ${fk(a)}</span>`).join('')}</div>`}
+ for(let d=1;d<=n;d++){const k=key(new Date(Y,M,d));c+=`<div class="dy ${k==sel?'on':''}" onclick="sel='${k}';R()">${d}<br>${Object.entries((S.rec[k]||[]).reduce((o,r)=>(o[r.s]=(o[r.s]||0)+r.a,o),{})).map(([s,a])=>`<span class="tg t${K[s]}" title="${fm(a)}">${s} ${fk(a)}</span>`).join('')}${(S.buys||[]).filter(b=>b.d==k).map(b=>`<span class="tg t3 bu" title="${e(b.n)} 구매 ${fm(b.a)}">구매 -${fk(b.a)}</span>`).join('')}</div>`}
  return `<h1>대시보드</h1><div class="cd row cr"><b>캐릭터</b><input id="cn" placeholder="캐릭터 이름 입력" onkeydown="if(event.key=='Enter')addCh()"><button onclick="addCh()">추가</button></div>
 <div class="g2"><div class="cd row" style="align-items:flex-start"><div style="flex:1;min-width:0"><div class="sub">현재 목표</div><b style="font-size:17px">${e(S.item.n)||'아이템 설정에서 목표를 정하세요'}</b><div class="sub">모은 메소 ${fm(tot)} / 목표 ${fm(t)}</div><div class="sub">(${fk(tot)} / ${fk(t)})</div><div class="bar"><i style="width:${p}%"></i></div><b style="color:var(--ac)">${p.toFixed(0)}% 달성</b><div style="margin-top:8px">${est(tot,t)}</div></div></div>
 <div class="cd"><div class="sub">이번 주 획득 (목요일 초기화)</div><b style="font-size:20px">${fm(w)}</b><div class="sub">${fk(w)}</div></div></div>
@@ -85,7 +94,7 @@ function D(){
 function P(){
  const rs=S.rec[sel]||[];
  let h=`<div class="cd"><b>${sel} 수입 기록</b>`+rs.map((r,i)=>`<div class="row" style="margin-top:6px"><span class="tg t${K[r.s]}">${r.s}</span><span style="flex:1;font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis" title="${e(r.m||'')}>${fe(r.a)} ${e(r.m||'')}</span><span style="cursor:pointer" onclick="del(${i})">✕</span></div>`).join('')
- +'<div class="sub" style="margin:10px 0 4px">출처</div>'+Object.keys(K).map(s=>`<span class="ch t${K[s]} ${fs==s?'on':''}" onclick="fs='${s}';R()">${s}</span>`).join('');
+ +(S.buys||[]).filter(b=>b.d==sel).map(b=>`<div class="row" style="margin-top:6px"><span class="tg t3 bu">구매</span><span style="flex:1;font-size:12px">-${fe(b.a)} ${e(b.n)}</span></div>`).join('')+'<div class="sub" style="margin:10px 0 4px">출처</div>'+Object.keys(K).map(s=>`<span class="ch t${K[s]} ${fs==s?'on':''}" onclick="fs='${s}';R()">${s}</span>`).join('');
  if(fs=='보스'){
   h+='<div class="sub">캐릭터별 클리어 기록</div>'+S.ch.map((x,j)=>`<span class="ch ${cc==j?'on':''}" onclick="cc=${j};R()">${e(x.n)} (${Object.keys(chk).filter(k=>chk[k]&&k.split('|')[0]==j).length})</span>`).join('');
   const it=(S.ch[cc]?S.ch[cc].s.map((s,i)=>s&&s.d?[i,s]:null).filter(Boolean):[]);
@@ -94,24 +103,45 @@ function P(){
   h+=`<div class="row" style="justify-content:space-between;margin:8px 0"><b>합계 (자동)</b><b style="color:var(--k1)">${fe(sum)}</b></div>`;
  }else h+=`<div class="sub" style="margin:6px 0 4px">획득 메소</div><input id="am" inputmode="numeric" placeholder="0" oninput="cm(this,'ah',fe)"><div class="sub" id="ah"></div>`;
  return h+`<input id="me" placeholder="메모" style="margin:8px 0"><button style="width:100%" onclick="add()">저장</button></div>`}
+const AL=()=>B.concat([MB]),sl=(c,n)=>c.s.findIndex(s=>s&&s.b==n);
+function inc(c){let w=0,m=0;c.s.forEach((s,i)=>{if(s&&s.d){i==12?m+=amt(s,i):w+=amt(s,i)}});return[w,m,w*52/12+m]}
+function pd(k,j){const c=cs(),[n,ds]=AL()[k],i=sl(c,n),d=ds[j][0];
+ if(i>=0){if(c.s[i].d==d)c.s[i]=null;else{c.s[i].d=d;c.s[i].p=Math.min(c.s[i].p,ds[j][2])}}
+ else{const f=k==B.length?12:c.s.slice(0,12).findIndex(x=>!x);
+  if(f<0){pop('!','주간 보스는 12개까지예요','다른 보스를 해제한 뒤 선택해 주세요.',[['확인']]);return}
+  c.s[f]={b:n,d,p:1}}
+ sv();R()}
+function spp(k,v){const c=cs();c.s[sl(c,AL()[k][0])].p=v;sv();R()}
+const bi=n=>`<span class="bi"><i>${n[0]}</i><img src="boss/${encodeURIComponent(n)}.png" alt="" onerror="this.remove()"></span>`;
+function bc(c,k){const[n,ds]=AL()[k],i=sl(c,n),s=i>=0?c.s[i]:null;
+ return `<div class="bc ${s?'on':''}"><div class="row">${bi(n)}<b style="flex:1;min-width:0">${n}</b></div><div>${ds.map((x,j)=>`<span class="dc ${s&&s.d==x[0]?'on':''}" onclick="pd(${k},${j})">${x[0]}</span>`).join('')}</div>${s&&s.d?`<div class="row" style="justify-content:space-between"><select style="width:auto" onchange="spp(${k},+this.value)">${Array.from({length:gd(i,n,s.d)[2]},(_,q)=>`<option value="${q+1}" ${s.p==q+1?'selected':''}>${q+1}인</option>`).join('')}</select><b style="color:var(--k1)">${fe(amt(s,i))}${s.p>1?' (÷'+s.p+')':''}</b></div>`:''}</div>`}
 function Bs(){
  const c=S.ch[S.cur]||S.ch[0];
  if(!c)return `<h1>보스 설정</h1><div class="cd"><b>등록된 캐릭터가 없어요</b><div class="sub" style="margin:6px 0 10px">캐릭터를 추가한 뒤 잡는 보스를 설정하세요.</div><div class="row cr"><input id="cn2" placeholder="캐릭터 이름 입력" onkeydown="if(event.key=='Enter')addCh('cn2')"><button onclick="addCh('cn2')">추가</button></div></div>`;
- let h=`<h1>보스 설정</h1><div class="g2" style="grid-template-columns:240px 1fr"><div class="cd"><b>내 캐릭터</b>`+S.ch.map((x,j)=>`<div class="nv ${S.cur==j?'on':''}" onclick="S.cur=${j};R()">${e(x.n)} <span class="sub">${x.s.slice(0,12).filter(Boolean).length}/12</span><span style="float:right;cursor:pointer" title="삭제" onclick="event.stopPropagation();askDel(${j})">✕</span></div>`).join('')+`<div class="row cr" style="margin-top:8px"><input id="cn2" placeholder="캐릭터 이름 입력" onkeydown="if(event.key=='Enter')addCh('cn2')"><button onclick="addCh('cn2')">추가</button></div></div><div class="cd"><b>${e(c.n)} 보스 설정</b><div class="sub" style="margin-bottom:8px">주간 보스는 캐릭터마다 최대 12개, 같은 보스는 난이도를 하나만 고를 수 있어요. 인원이 2명이면 금액이 절반이에요.</div>`;
- for(let i=0;i<13;i++){const s=c.s[i],LL=i==12?[MB]:B,used=c.s.map(x=>x&&x.b),bo=LL.filter(x=>!used.includes(x[0])||(s&&s.b==x[0])),bd=s?gb(i,s.b)[1]:[],mx=s&&s.d?gd(i,s.b,s.d)[2]:0;
-  h+=(i==12?'<div class="sub" style="margin:10px 0 4px">월간 보스 (주간 12개 제한과 별개)</div>':'')+`<div class="sl"><span class="sub">${i==12?'월':i+1}</span><select onchange="sB(${i},this.value)"><option value="">보스 선택</option>${bo.map(x=>`<option ${s&&s.b==x[0]?'selected':''}>${x[0]}</option>`).join('')}</select><select ${s?'':'disabled'} onchange="sD(${i},this.value)"><option value="">난이도</option>${bd.map(x=>`<option ${s&&s.d==x[0]?'selected':''}>${x[0]}</option>`).join('')}</select><select ${mx?'':'disabled'} onchange="sP(${i},+this.value)">${mx?Array.from({length:mx},(_,k)=>`<option value="${k+1}" ${s.p==k+1?'selected':''}>${k+1}인</option>`).join(''):'<option>-</option>'}</select><b class="am" style="color:var(--k1);text-align:right">${s&&s.d?fm(amt(s,i))+(s.p>1?' (÷'+s.p+')':''):'-'}</b></div>`}
- return h+'</div></div>'}
+ const[w,m,mm]=inc(c),n=c.s.slice(0,12).filter(Boolean).length;
+ return `<h1>보스 설정</h1><div class="g2" style="grid-template-columns:260px 1fr"><div class="cd"><b>내 캐릭터</b>${S.ch.map((x,j)=>{const v=inc(x);return `<div class="nv ${S.cur==j?'on':''}" onclick="S.cur=${j};R()">${e(x.n)} <span class="sub">${x.s.slice(0,12).filter(Boolean).length}/12</span><span style="float:right;cursor:pointer" title="삭제" onclick="event.stopPropagation();askDel(${j})">✕</span><div class="sub" style="font-weight:400">주 ${fe(v[0])} · 월 ${fe(v[2])}</div></div>`}).join('')}<div class="row cr" style="margin-top:8px"><input id="cn2" placeholder="캐릭터 이름 입력" onkeydown="if(event.key=='Enter')addCh('cn2')"><button onclick="addCh('cn2')">추가</button></div></div><div class="cd"><b>${e(c.n)} 보스 설정</b>
+<div class="sm"><div><div class="sub">주간 수익</div><b>${fe(w)}</b></div><div><div class="sub">월간 수익</div><b>${fe(mm)}</b><div class="sub">주간×4.33 + 월간 보스</div></div><div><div class="sub">선택한 주간 보스</div><b>${n} / 12</b></div></div>
+<div class="sub" style="margin-bottom:6px">주간 보스 · 난이도를 눌러 선택하고, 다시 누르면 해제돼요. 인원이 2명이면 금액이 절반이에요.</div><div class="bg">${B.map((_,k)=>bc(c,k)).join('')}</div>
+<div class="sub" style="margin:14px 0 6px">월간 보스 (주간 12개 제한과 별개)</div><div class="bg">${bc(c,B.length)}</div></div></div>`}
 let dr=null,pp=null;
-const total=()=>Object.values(S.rec).flat().reduce((a,r)=>a+r.a,0);
+const total=()=>bal();
 function pv(){const t=+dr.t||0,p=t?Math.min(100,total()/t*100):0;return `<b style="font-size:16px">${e(dr.n)||'목표 아이템 이름'}</b><div class="sub">모은 메소 ${fm(total())} / 목표 ${fm(t)}</div><div class="bar"><i style="width:${p}%"></i></div><b style="color:var(--ac)">${p.toFixed(0)}% 달성</b>`}
 const upPv=()=>{$('#pv').innerHTML=pv()};
 function cm(el,h,f=fk){const v=el.value.replace(/\D/g,'');el.value=v?(+v).toLocaleString('ko-KR'):'';$('#'+h).textContent=v?f(+v):''}
 function pop(ic,t,m,b){pp={ic,t,m,b};R()}
 function saveIt(){S.item={n:dr.n,t:dr.t,m:dr.m};sv();pop('✓','저장했어요','목표 아이템이 저장됐어요. 대시보드에서 확인할 수 있어요.',[['확인']])}
-function askReset(){pop('!','초기화할까요?','입력한 내용과 저장된 목표 아이템이 지워져요. 수입 기록은 그대로 남아요.',[['취소','bs'],['초기화','','doReset()']])}
-function doReset(){S.item={n:'',t:0,m:''};dr={...S.item};sv();pop('✓','초기화했어요','목표 아이템 정보를 모두 비웠어요.',[['확인']])}
+function askReset(){pop('!','초기화할까요?','입력한 내용이 지워져요. 저장된 목표와 모은 메소는 그대로예요.',[['취소','bs'],['초기화','','doReset()']])}
+function doReset(){dr={n:'',t:0,m:''};pop('✓','초기화했어요','입력칸을 비웠어요. 저장하기 전까지 기존 목표는 그대로예요.',[['확인']])}
+function askBuy(){const t=+S.item.t||0,b=bal();pop('🎉','구매 완료 처리',`<div style="text-align:left;margin-top:6px"><div class="sub">구매 금액 (모은 메소 ${fe(b)})</div><input id="ba" inputmode="numeric" value="${fm(t)}" oninput="cm(this,'bh',v=>'구매 후 남는 금액 '+fe(bal()-v))"><div class="sub" id="bh">구매 후 남는 금액 ${fe(b-t)}</div><label class="row" style="margin-top:8px"><input type="radio" name="bc" value="1" checked style="width:auto"><span>남은 금액 이월</span></label><label class="row"><input type="radio" name="bc" value="0" style="width:auto"><span>0부터 시작</span></label></div>`,[['취소','bs'],['구매 완료','','doBuy()']])}
+function doBuy(){const a=+$('#ba').value.replace(/,/g,''),keep=document.querySelector('input[name=bc]:checked').value=='1',b=bal();
+ if(!a||a>b){pop('!','금액을 확인해 주세요','구매 금액은 0보다 크고 모은 메소 이하여야 해요.',[['확인']]);return}
+ (S.buys=S.buys||[]).push({n:S.item.n||'(이름 없음)',d:key(new Date()),a,x:keep?0:b-a});
+ S.item={n:'',t:0,m:''};dr=null;sv();pop('🎉','구매를 기록했어요','새 목표 아이템을 설정해 보세요.',[['닫기','bs'],['새 목표 설정','','pp=null;tab=2;dr=null;R()']])}
+function askUndo(i){pop('!','구매 기록을 취소할까요?',e(S.buys[i].n)+' 구매가 취소되고 모은 메소가 되돌아와요.',[['아니요','bs'],['취소하기','','delBuy('+i+')']])}
+function delBuy(i){S.buys.splice(i,1);sv();pop('✓','취소했어요','구매 기록을 지웠어요.',[['확인']])}
+function hist(){const b=S.buys||[];return `<div class="cd"><b>구매 이력</b>${b.length?b.map((x,i)=>`<div class="row" style="margin-top:8px;justify-content:space-between"><span style="flex:1;min-width:0">${e(x.n)} <span class="sub">${x.d}${x.x?' · 0부터 시작 (소멸 '+fe(x.x)+')':''}</span></span><b>-${fe(x.a)}</b><span style="cursor:pointer" title="구매 취소" onclick="askUndo(${i})">✕</span></div>`).reverse().join(''):'<div class="sub" style="margin-top:6px">아직 구매 기록이 없어요</div>'}</div>`}
 document.addEventListener('keydown',ev=>{if(ev.key=='Escape'&&pp){pp=null;R()}});
-function It(){if(!dr)dr={...S.item};const i=dr;return `<h1>아이템 설정</h1><div class="g2" style="grid-template-columns:1fr 300px"><div class="cd"><b>목표 아이템 입력</b><div class="sub">목표 아이템은 하나만 설정할 수 있어요</div><div class="row" style="align-items:flex-start;margin-top:10px"><div style="flex:1;display:grid;gap:10px;min-width:0"><div><div class="sub">아이템 이름</div><input value="${e(i.n)}" placeholder="예: 아이템 이름" oninput="dr.n=this.value;upPv()"></div><div><div class="sub">목표 메소</div><input inputmode="numeric" value="${i.t?fm(i.t):''}" placeholder="0" oninput="cm(this,'th');dr.t=+this.value.replace(/,/g,'');upPv()"><div class="sub" id="th">${i.t?fk(i.t):''}</div></div><div><div class="sub">메모 (선택)</div><input value="${e(i.m)}" placeholder="구매 계획 등" oninput="dr.m=this.value"></div></div></div><div class="row" style="margin-top:14px"><button onclick="saveIt()">저장</button><button class="bs" onclick="askReset()">초기화</button></div></div><div class="cd" id="pv" style="display:grid;gap:8px;align-content:start">${pv()}</div></div>`}
+function It(){if(!dr)dr={...S.item};const i=dr;return `<h1>아이템 설정</h1><div class="g2" style="grid-template-columns:1fr 300px"><div class="cd"><b>목표 아이템 입력</b><div class="sub">목표 아이템은 하나만 설정할 수 있어요</div><div class="row" style="align-items:flex-start;margin-top:10px"><div style="flex:1;display:grid;gap:10px;min-width:0"><div><div class="sub">아이템 이름</div><input value="${e(i.n)}" placeholder="예: 아이템 이름" oninput="dr.n=this.value;upPv()"></div><div><div class="sub">목표 메소</div><input inputmode="numeric" value="${i.t?fm(i.t):''}" placeholder="0" oninput="cm(this,'th');dr.t=+this.value.replace(/,/g,'');upPv()"><div class="sub" id="th">${i.t?fk(i.t):''}</div></div><div><div class="sub">메모 (선택)</div><input value="${e(i.m)}" placeholder="구매 계획 등" oninput="dr.m=this.value"></div></div></div><div class="row" style="margin-top:14px"><button onclick="saveIt()">저장</button><button class="bs" onclick="askReset()">초기화</button></div></div><div class="cd" id="pv" style="display:grid;gap:8px;align-content:start">${pv()}</div></div>${hist()}`}
 const cs=()=>S.ch[S.cur];
 function sB(i,v){cs().s[i]=v?{b:v,d:'',p:1}:null;sv();R()}
 function sD(i,v){const s=cs().s[i];s.d=v;s.p=1;sv();R()}

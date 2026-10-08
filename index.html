@@ -112,8 +112,9 @@ function pd(k,j){const c=cs(),[n,ds]=AL()[k],i=sl(c,n),d=ds[j][0];
   c.s[f]={b:n,d,p:1}}
  sv();R()}
 function spp(k,v){const c=cs();c.s[sl(c,AL()[k][0])].p=v;sv();R()}
-const bi=n=>`<span class="bi"><i>${n[0]}</i><img src="boss/${encodeURIComponent(n)}.png" alt="" onerror="this.remove()"></span>`;
-function bc(c,k){const[n,ds]=AL()[k],i=sl(c,n),s=i>=0?c.s[i]:null,mx=s&&s.d?gd(i,n,s.d)[2]:0;
+const imgs=n=>{const o=[];for(const v of new Set([n,n.replace(/ /g,'')]))for(const x of['png','jpg','jpeg','webp','PNG','JPG','JPEG','WEBP'])for(const f of['NFC','NFD'])o.push('boss/'+encodeURIComponent(v.normalize(f))+'.'+x);return o};
+function nx(el){const l=imgs(el.dataset.n),i=+el.dataset.i+1;if(i<l.length){el.dataset.i=i;el.src=l[i]}else el.remove()}
+const bi=(n,k)=>`<span class="bi" style="--h:${k*37%360}"><i>${n[0]}</i><img data-n="${e(n)}" data-i="0" src="${imgs(n)[0]}" alt="" onerror="nx(this)"></span>`;function bc(c,k){const[n,ds]=AL()[k],i=sl(c,n),s=i>=0?c.s[i]:null,mx=s&&s.d?gd(i,n,s.d)[2]:0;
  return `<div class="bc ${s?'on':''}">${bi(n)}<b style="text-align:center;font-size:13px">${n}</b><div class="dg">${ds.map((x,j)=>`<span class="dc ${s&&s.d==x[0]?'on':''}" ${ds.length==1?'style="grid-column:1/-1"':''} onclick="pd(${k},${j})">${x[0]}</span>`).join('')}</div>${mx?`<div class="row" style="justify-content:center;gap:10px"><button class="sb2" ${s.p<=1?'disabled':''} onclick="spp(${k},${s.p-1})">−</button><b>${s.p}인</b><button class="sb2" ${s.p>=mx?'disabled':''} onclick="spp(${k},${s.p+1})">+</button></div><div style="text-align:center;font-size:12px"><span class="sub">최대 ${mx}인 · </span><b style="color:var(--k1)">${fe(amt(s,i))}${s.p>1?' (÷'+s.p+')':''}</b></div>`:''}</div>`}
 function Bs(){
  const c=S.ch[S.cur]||S.ch[0];
